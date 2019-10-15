@@ -14,5 +14,4 @@ class FileAdapterDiffCallback : DiffUtil.ItemCallback<Download.Progress>() {
     ): Boolean {
         return oldItem == newItem
     }
-
 }

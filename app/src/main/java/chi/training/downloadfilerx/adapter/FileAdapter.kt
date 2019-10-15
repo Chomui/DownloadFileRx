@@ -36,7 +36,6 @@ class FileAdapter(private val executorService: ExecutorService, private val file
                         when (it) {
                             is Download.Progress -> {
                                 holder.fileProgress.progress = it.getPercent()
-                                holder.fileButton.text = "Cancel"
                             }
                             is Download.Failure -> {
                                 holder.fileProgress.progress = 0
