@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), OnDownloadButtonClickListener, IStatus
     }
 
     override fun downloadStarted(isStarted: Boolean) {
+        
     }
 
     override fun inDownloading(fileInfo: Info) {

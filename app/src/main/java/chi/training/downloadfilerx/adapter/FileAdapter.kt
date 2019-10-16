@@ -8,15 +8,10 @@ import android.widget.ProgressBar
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import chi.training.downloadfilerx.R
-import chi.training.downloadfilerx.download.Download
 import chi.training.downloadfilerx.download.DownloadTask
 import chi.training.downloadfilerx.download.OnDownloadButtonClickListener
 import chi.training.downloadfilerx.download.Status
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import java.io.File
 import java.util.*
-import java.util.concurrent.ExecutorService
 
 class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListener, private val data: MutableList<DownloadTask>)
     : ListAdapter<DownloadTask, FileAdapter.FileItemViewHolder>(FileAdapterDiffCallback()){

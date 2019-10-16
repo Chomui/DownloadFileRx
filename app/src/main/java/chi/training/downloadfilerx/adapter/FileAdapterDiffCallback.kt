@@ -1,7 +1,6 @@
 package chi.training.downloadfilerx.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import chi.training.downloadfilerx.download.Download
 import chi.training.downloadfilerx.download.DownloadTask
 
 class FileAdapterDiffCallback : DiffUtil.ItemCallback<DownloadTask>() {
