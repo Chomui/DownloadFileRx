@@ -9,23 +9,79 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import chi.training.downloadfilerx.R
 import chi.training.downloadfilerx.download.Download
+import chi.training.downloadfilerx.download.DownloadTask
+import chi.training.downloadfilerx.download.OnDownloadButtonClickListener
+import chi.training.downloadfilerx.download.Status
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import java.io.File
+import java.util.*
 import java.util.concurrent.ExecutorService
 
-class FileAdapter(private val executorService: ExecutorService, private val filesDir: File)
-    : ListAdapter<Download.Progress, FileAdapter.FileItemViewHolder>(FileAdapterDiffCallback()){
+class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListener, private val data: MutableList<DownloadTask>)
+    : ListAdapter<DownloadTask, FileAdapter.FileItemViewHolder>(FileAdapterDiffCallback()){
+
+    fun notifyOnyItem(id: UUID) {
+        for (i in data.indices) {
+            if (data[i].id === id) {
+                notifyItemChanged(i)
+                return
+            }
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FileItemViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.recycler_item, parent, false)
-        return FileItemViewHolder(view)
+        return FileItemViewHolder(view, onGlobalClickListener)
     }
 
     override fun onBindViewHolder(holder: FileItemViewHolder, position: Int) {
         val data = getItem(position)
-        holder.fileButton.setOnClickListener {
+        if (data != null) {
+            holder.bindTo(holder, data)
+        }
+    }
+
+    class FileItemViewHolder(
+        itemView: View,
+        private val onLocalClickListener: OnDownloadButtonClickListener
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        var fileProgress: ProgressBar = itemView.findViewById(R.id.progressBarDownload)
+        var fileButton: Button = itemView.findViewById(R.id.buttonDownload)
+
+        init {
+            fileButton.setOnClickListener(this)
+        }
+
+        override fun onClick(p0: View?) {
+            if (fileButton.text == "Click to start" || fileButton.text == "CANCELED") {
+                onLocalClickListener.downloadClick(adapterPosition)
+            } else {
+                onLocalClickListener.cancelClick(adapterPosition)
+            }
+        }
+
+        fun bindTo(holder: FileItemViewHolder ,data: DownloadTask) {
+            holder.fileProgress.progress = data.percent
+            when(data.info.status) {
+                Status.IN_QUEUE -> holder.fileButton.text = "In queue"
+                Status.DOWNLOAD_START -> holder.fileButton.text = "In progress"
+                Status.DOWNLOAD_STOPPED -> holder.fileButton.text = "Failure"
+                Status.CANCELED -> holder.fileButton.text = "CANCELED"
+                Status.DOWNLOAD_FINISHED -> holder.fileButton.text = "Done"
+                else -> {
+                    holder.fileButton.text = "Click to start"
+                }
+            }
+        }
+    }
+
+
+}
+
+/*
+ holder.fileButton.setOnClickListener {
             if (!data.isDownload) {
                 data.isDownload = true
                 holder.fileButton.text = "In queue"
@@ -53,12 +109,4 @@ class FileAdapter(private val executorService: ExecutorService, private val file
                 data.isCanceled = true
             }
         }
-    }
-
-    class FileItemViewHolder(
-        itemView: View
-    ) : RecyclerView.ViewHolder(itemView) {
-        var fileProgress: ProgressBar = itemView.findViewById(R.id.progressBarDownload)
-        var fileButton: Button = itemView.findViewById(R.id.buttonDownload)
-    }
-}
+ */

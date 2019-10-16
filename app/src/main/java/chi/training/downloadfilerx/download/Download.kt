@@ -1,6 +1,5 @@
 package chi.training.downloadfilerx.download
 
-import android.util.Log
 import io.reactivex.Observable
 import java.io.File
 import java.io.FileOutputStream
@@ -71,6 +70,4 @@ sealed class Download {
             }
         }
     }
-
-
 }
