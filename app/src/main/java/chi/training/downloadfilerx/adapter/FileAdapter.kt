@@ -13,8 +13,10 @@ import chi.training.downloadfilerx.download.OnDownloadButtonClickListener
 import chi.training.downloadfilerx.download.Status
 import java.util.*
 
-class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListener, private val data: MutableList<DownloadTask>)
-    : RecyclerView.Adapter<FileAdapter.FileItemViewHolder>(){
+class FileAdapter(
+    private val onGlobalClickListener: OnDownloadButtonClickListener,
+    private val data: MutableList<DownloadTask>
+) : RecyclerView.Adapter<FileAdapter.FileItemViewHolder>() {
 
     override fun getItemCount(): Int {
         return data.size
@@ -59,9 +61,9 @@ class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListen
             }
         }
 
-        fun bindTo(holder: FileItemViewHolder ,data: DownloadTask) {
+        fun bindTo(holder: FileItemViewHolder, data: DownloadTask) {
             holder.fileProgress.progress = data.percent
-            when(data.info.status) {
+            when (data.info.status) {
                 Status.IN_QUEUE -> holder.fileButton.text = "In queue"
                 Status.DOWNLOAD_START -> holder.fileButton.text = "In progress"
                 Status.DOWNLOAD_STOPPED -> holder.fileButton.text = "Failure"

@@ -25,17 +25,16 @@ class MainActivity : AppCompatActivity(), OnDownloadButtonClickListener, IStatus
         adapter = FileAdapter(this, tasks)
         recyclerViewDownload.layoutManager = LinearLayoutManager(this)
         recyclerViewDownload.adapter = adapter
-
+        
         for (i in 1..10) {
             val request = DownloadRequest(
                 "file$i",
-                "https://download.microsoft.com/download/8/b/4/8b4addd8-e957-4dea-bdb8-c4e00af5b94b/NDP1.1sp1-KB867460-X86.exe",
+                "https://codeload.github.com/android/camera-samples/zip/master",
                 filesDir
             )
             val task = DownloadManager.addTask(request)
             tasks.add(task)
         }
-
         adapter.notifyDataSetChanged()
     }
 

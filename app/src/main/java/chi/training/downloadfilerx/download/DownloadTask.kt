@@ -6,20 +6,13 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
 
-class DownloadTask: Runnable {
+class DownloadTask(var request: DownloadRequest) : Runnable {
     val id: UUID = UUID.randomUUID()
     val info: Info = Info(id)
     var status: Boolean = false
     var percent: Int = 0
-    var path: File
-    var url: URL
-    var request: DownloadRequest
-
-    constructor(request: DownloadRequest) {
-        this.request = request
-        path = request.path
-        url = URL(request.url)
-    }
+    var path: File = request.path
+    var url: URL = URL(request.url)
 
     override fun run() {
         val urlConnection: HttpURLConnection = url.openConnection() as HttpURLConnection
