@@ -23,9 +23,9 @@ object DownloadManager {
     fun startDownload(task: DownloadTask) {
         executorService.execute(task)
         task.info.status = Status.IN_QUEUE
+        task.status = false
         val msg = handler.obtainMessage(DownloadManager.IN_DOWNLOADING, task.info)
         handler.sendMessage(msg)
-        task.status = false
     }
 
     fun cancelDownload(task: DownloadTask) {

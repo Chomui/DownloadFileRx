@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), OnDownloadButtonClickListener, IStatus
             tasks.add(task)
         }
 
-        adapter.submitList(tasks)
+        adapter.notifyDataSetChanged()
     }
 
     override fun onStart() {
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), OnDownloadButtonClickListener, IStatus
     }
 
     override fun downloadStarted(isStarted: Boolean) {
-        
+
     }
 
     override fun inDownloading(fileInfo: Info) {

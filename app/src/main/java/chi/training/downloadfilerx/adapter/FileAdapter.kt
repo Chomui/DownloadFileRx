@@ -14,7 +14,11 @@ import chi.training.downloadfilerx.download.Status
 import java.util.*
 
 class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListener, private val data: MutableList<DownloadTask>)
-    : ListAdapter<DownloadTask, FileAdapter.FileItemViewHolder>(FileAdapterDiffCallback()){
+    : RecyclerView.Adapter<FileAdapter.FileItemViewHolder>(){
+
+    override fun getItemCount(): Int {
+        return data.size
+    }
 
     fun notifyOnyItem(id: UUID) {
         for (i in data.indices) {
@@ -32,10 +36,8 @@ class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListen
     }
 
     override fun onBindViewHolder(holder: FileItemViewHolder, position: Int) {
-        val data = getItem(position)
-        if (data != null) {
-            holder.bindTo(holder, data)
-        }
+        val data = data[position]
+        holder.bindTo(holder, data)
     }
 
     class FileItemViewHolder(
@@ -71,37 +73,4 @@ class FileAdapter(private val onGlobalClickListener: OnDownloadButtonClickListen
             }
         }
     }
-
-
 }
-
-/*
- holder.fileButton.setOnClickListener {
-            if (!data.isDownload) {
-                data.isDownload = true
-                holder.fileButton.text = "In queue"
-                data.downloadFile(filesDir)
-                    .subscribeOn(Schedulers.from(executorService))
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        when (it) {
-                            is Download.Progress -> {
-                                holder.fileProgress.progress = it.getPercent()
-                            }
-                            is Download.Failure -> {
-                                holder.fileProgress.progress = 0
-                                holder.fileButton.text = "Download"
-                                data.isCanceled = false
-                                data.isDownload = false
-                            }
-                            is Download.Success -> {
-                                holder.fileButton.text = "Download"
-                                data.isDownload = false
-                            }
-                        }
-                    }
-            } else {
-                data.isCanceled = true
-            }
-        }
- */

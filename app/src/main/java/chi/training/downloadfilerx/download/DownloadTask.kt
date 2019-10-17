@@ -5,7 +5,6 @@ import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.*
-import kotlin.random.Random
 
 class DownloadTask: Runnable {
     val id: UUID = UUID.randomUUID()
@@ -44,15 +43,19 @@ class DownloadTask: Runnable {
             if (!status) {
                 info.bytesRead += bufferLength
                 percent = info.bytesRead * 100 / info.contentLength
+
                 fileOutput.write(buffer, 0, bufferLength)
                 //emitter.onNext(this)
                 info.status = Status.DOWNLOAD_START
                 val msg = request.handler.obtainMessage(DownloadManager.IN_DOWNLOADING, info)
                 request.handler.sendMessage(msg)
+
                 bufferLength = inputStream.read(buffer)
             } else {
                 file.delete()
+
                 info.bytesRead = 0
+
                 info.status = Status.CANCELED
                 val msg = request.handler.obtainMessage(DownloadManager.IS_CANCELED, info)
                 request.handler.sendMessage(msg)
@@ -72,19 +75,4 @@ class DownloadTask: Runnable {
         inputStream.close()
         fileOutput.close()
     }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is DownloadTask) return false
-
-        if (id != other.id) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
-
-
 }
